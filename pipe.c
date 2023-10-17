@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 			}
 			execlp(task, task, NULL);
 			// exec fails
-			perror("exec fail");
+			// perror("exec fail");
 			exit(errno);
 		} else if (pid > 0)
 		{
@@ -50,8 +50,7 @@ int main(int argc, char *argv[])
 			waitpid(pid, &status, 0);
 			if (status != 0)
 			{
-				// printf("\n %d \n", status);
-				exit(EXIT_FAILURE);
+				exit(WEXITSTATUS(status));
 			}
 
 			close(fds[1]);
