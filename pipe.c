@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <errno.h>
 
 // void pipe_recurse(char *args, int curr_arg)
 // {
@@ -40,10 +41,19 @@ int main(int argc, char *argv[])
 				dup2(fds[1], 1);
 			}
 			execlp(task, task, NULL);
+			// exec fails
+			perror("exec fail");
+			exit(errno);
 		} else if (pid > 0)
 		{
 			int status;
 			waitpid(pid, &status, 0);
+			if (status != 0)
+			{
+				// printf("\n %d \n", status);
+				exit(EXIT_FAILURE);
+			}
+
 			close(fds[1]);
 			dup2(fds[0], 0);
 		} else {
