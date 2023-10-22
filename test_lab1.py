@@ -56,7 +56,6 @@ class TestLab1(unittest.TestCase):
         self.assertTrue(self.make, msg='make failed')
         pipe_result = subprocess.run(('./pipe', 'ls', 'bogus'), stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
-        print(pipe_result.returncode)
         self.assertTrue(pipe_result.returncode, msg='Bogus argument should cause an error, expect nonzero return code.')
         self.assertNotEqual(pipe_result.stderr, '', msg='Error should be reported to standard error.')
         self.assertTrue(self._make_clean, msg='make clean failed')
