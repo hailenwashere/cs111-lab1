@@ -12,7 +12,10 @@ int main(int argc, char *argv[])
 	{
 		char* task = argv[i];
 		int fds[2];
-		pipe(fds);
+		if (pipe(fds) < 0){
+			exit(errno);
+		}
+		
 
 		// child process
 		int pid = fork();
@@ -24,7 +27,6 @@ int main(int argc, char *argv[])
 				dup2(fds[1], 1);
 			}
 			execlp(task, task, NULL);
-			// exec fails, execlp sets errno
 			exit(errno);
 		} else if (pid > 0)
 		{
@@ -38,7 +40,7 @@ int main(int argc, char *argv[])
 			close(fds[1]);
 			dup2(fds[0], 0);
 		} else {
-			perror("failure to fork");
+			exit(errno);
 		}
 	}
 
